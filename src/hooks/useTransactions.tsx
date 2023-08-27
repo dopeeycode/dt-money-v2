@@ -1,8 +1,9 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { TransactionsProps } from "../pages/Transactions";
 
 interface TransactionContextType {
   transactions: TransactionsProps[]
+  isLoading: boolean
 }
 
 export const TransactionsContext = createContext({} as TransactionContextType)
@@ -13,6 +14,7 @@ interface TransactionsProviderProps {
 
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
   const [transactions, setTransactions] = useState<TransactionsProps[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     async function loadTransactions() {
@@ -20,14 +22,21 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
       const data = await response.json()
 
       setTransactions(data)
+      setIsLoading(false)
     }
 
     loadTransactions()
   }, [])
 
   return (
-    <TransactionsContext.Provider value={{ transactions }}>
+    <TransactionsContext.Provider value={{ transactions, isLoading }}>
       {children}
     </TransactionsContext.Provider>
   )
+}
+
+export function useTransactions() {
+  const { isLoading, transactions } = useContext(TransactionsContext)
+
+  return { isLoading, transactions }
 }
