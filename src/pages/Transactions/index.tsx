@@ -3,7 +3,7 @@ import { Header } from "../../components/Header";
 import { Summary } from "../../components/Summary";
 import { SearchForm } from "./components/SearchForm";
 import { PriceHighlight, TransactionsContainer, TransactionsTable } from "./styles";
-import { TransactionsContext } from "../../contexts/TransactionsContext";
+import { useTransactions } from "../../hooks/useTransactions";
 import { dateFormatter, priceFormatter } from "../../utils/formatter";
 
 export interface TransactionsProps {
@@ -16,7 +16,7 @@ export interface TransactionsProps {
 }
 
 export function Transactions() {
-  const { transactions } = useContext(TransactionsContext)
+  const { transactions } = useTransactions()
 
   return (
     <div>
